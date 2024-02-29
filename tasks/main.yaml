@@ -1,0 +1,7 @@
+---
+- name: Install packages
+  ansible.builtin.import_tasks: packages.yaml
+- name: Install SteamCMD
+  ansible.builtin.import_tasks: steamcmd.yaml
+- name: Setup Dont Starve Together server
+  ansible.builtin.import_tasks: setup_dst-server.yaml

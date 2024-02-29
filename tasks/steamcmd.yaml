@@ -1,0 +1,21 @@
+---
+- name: Accept Steam license
+  ansible.builtin.debconf:
+    name: "steam"
+    question: "steam/question"
+    value: "I AGREE"
+    vtype: "select"
+
+- name: Accept Steam license
+  ansible.builtin.debconf:
+    name: "steam"
+    question: "steam/license"
+    value: ""
+    vtype: "select"
+
+- name: Install SteamCMD and libcurl-gnutls from repos
+  ansible.builtin.apt:
+    name:
+      - steamcmd
+    state: present
+    update_cache: true

@@ -1,0 +1,14 @@
+[Unit]
+Description=Dont Starve Together Caves-server
+After=networking.service dst-server-dummy.service
+PartOf=dst-server-dummy.service
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+User={{ dst_srv_user }}
+WorkingDirectory={{ game_server_user.home }}/{{ dst_srv_game_dir }}/bin64
+ExecStart=/usr/bin/tmux new -Ads DST-srv_Caves -n Caves -c {{ game_server_user.home }}/{{ dst_srv_game_dir }}/bin64 "{{ game_server_user.home }}/{{ dst_srv_game_dir }}/bin64/dontstarve_dedicated_server_nullrenderer_x64 -console -cluster {{ dst_srv_cluster_name }} -monitor_parent_process $$ -shard Caves"
+ExecStop=/usr/bin/tmux send-keys -t DST-srv_Caves.0 "c_shutdown(true)" ENTER
+SyslogIdentifier=dst-srv_Caves
+[Install]
+WantedBy=multi-user.target

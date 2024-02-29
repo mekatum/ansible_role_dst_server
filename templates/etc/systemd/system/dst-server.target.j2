@@ -1,0 +1,6 @@
+[Unit]
+Description=Dont Starve Together Dedicated Server
+Requires=dst-server-dummy.service dst-server-master.service dst-server-caves.service
+After=dst-server-dummy.service dst-server-master.service dst-server-caves.service
+[Install]
+WantedBy=multi-user.target

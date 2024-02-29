@@ -1,0 +1,6 @@
+---
+dst_srv_user: dst
+dst_srv_comment: Dont Starve Together server user
+dst_srv_steamcmd_url: https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+dst_srv_game_dir: dst_srv
+dst_srv_cluster_name: MyDediServer

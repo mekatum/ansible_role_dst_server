@@ -1,0 +1,48 @@
+---
+- name: Add specific user for game-server
+  ansible.builtin.user:
+    name: '{{ dst_srv_user }}'
+    comment: '{{ dst_srv_comment }}'
+    state: present
+    shell: /bin/bash
+  register: game_server_user
+
+- name: Setup DST server
+  ansible.builtin.shell: |
+    su -l {{ dst_srv_user }} sh -c "steamcmd \
+    +force_install_dir {{ game_server_user.home }}/{{ dst_srv_game_dir }} \
+    +login anonymous \
+    +app_update 343050 \
+    +quit 2>&1 > {{ game_server_user.home }}/debug.log"
+  args:
+    creates: '{{ game_server_user.home }}/{{ dst_srv_game_dir }}/dontstarve.xpm'
+
+- name: Render systemd units
+  notify: systemd_daemon-reload
+  block:
+    - name: Render systemd-target unit for server
+      ansible.builtin.template:
+        src: etc/systemd/system/dst-server.target.j2
+        dest: /etc/systemd/system/dst-server.target
+        mode: '0644'
+    - name: Render dummy session
+      ansible.builtin.template:
+        src: etc/systemd/system/dst-server-dummy.service.j2
+        dest: /etc/systemd/system/dst-server-dummy.service
+        mode: '0644'
+    - name: Render master server session
+      ansible.builtin.template:
+        src: etc/systemd/system/dst-server-master.service.j2
+        dest: /etc/systemd/system/dst-server-master.service
+        mode: '0644'
+    - name: Render caves server session
+      ansible.builtin.template:
+        src: etc/systemd/system/dst-server-caves.service.j2
+        dest: /etc/systemd/system/dst-server-caves.service
+        mode: '0644'
+
+- name: Start and enable DST servers
+  ansible.builtin.systemd_service:
+    state: started
+    name: dst-server.target
+    enabled: true
