@@ -3,7 +3,7 @@ After=networking.service
 [Service]
 Type=forking
 User={{ dst_srv_user }}
-ExecStart=/usr/bin/tmux new-session -s DST-server_dummy-session -d
-SyslogIdentifier=DST-server_dummy
+ExecStart=/usr/bin/tmux new-session -s DST-srv_dummy-session -d
+SyslogIdentifier=DST-srv_dummy
 [Install]
 WantedBy=multi-user.target
